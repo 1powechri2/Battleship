@@ -7,6 +7,17 @@ class GameModuleTest < Minitest::Test
   end
 
   def test_pick_ship_placement_size_3
-    assert_equal 3, pick_ship_placement_size_3.length
+    ship_size_2 = pick_ship_placement_size_2
+    ship_size_3 = pick_ship_placement_size_3(ship_size_2)
+
+    assert_equal 3, ship_size_3.length
+  end
+
+  def test_ships_do_not_overlap
+    ship_size_2 = pick_ship_placement_size_2
+    ship_size_3 = pick_ship_placement_size_3(ship_size_2)
+binding.pry
+    refute ship_size_3.include? ship_size_2[0]
+    refute ship_size_3.include? ship_size_2[1]
   end
 end
