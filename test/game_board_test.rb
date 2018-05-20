@@ -24,45 +24,44 @@ class GameBoardTest < Minitest::Test
     assert_equal 'a1', @board.rows[0][0]
   end
 
-  def test_pick_ship_placement_size_2
-    assert_equal 2, @board.pick_ship_placement_size_2.length
+  def test_pick_ship_placement_size_2_for_computer
+    assert_equal 2, @board.pick_ship_placement_size_2_for_computer.length
   end
 
-  def test_pick_ship_placement_size_3
-    ship_size_2 = @board.pick_ship_placement_size_2
-    ship_size_3 = @board.pick_ship_placement_size_3(ship_size_2)
+  def test_pick_ship_placement_size_3_forcomputer
+    ship_size_2 = @board.pick_ship_placement_size_2_for_computer
+    ship_size_3 = @board.pick_ship_placement_size_3_for_computer(ship_size_2)
 
     assert_equal 3, ship_size_3.length
   end
 
-  def test_ships_do_not_overlap
-    ship_size_2 = @board.pick_ship_placement_size_2
-    ship_size_3 = @board.pick_ship_placement_size_3(ship_size_2)
+  def test_computer_ships_do_not_overlap
+    ship_size_2 = @board.pick_ship_placement_size_2_for_computer
+    ship_size_3 = @board.pick_ship_placement_size_3_for_computer(ship_size_2)
 
     refute ship_size_3.include? ship_size_2[0]
     refute ship_size_3.include? ship_size_2[1]
   end
 
+  def test_pick_ship_placement_size_2_for_human
+    pick = 'a4 b4'
+    ship_size_2 = @board.pick_ship_placement_size_2_for_human(pick)
+
+    assert_equal ['a4', 'b4'], ship_size_2
+  end
+
   def test_place_ship_size_2
-    @board.place_ship_size_2(['c2', 'c3'])
+    @board.place_ship(['c2', 'c3'])
 
     assert @board.rows[2][1] == 'x'
     assert @board.rows[2][2] == 'x'
   end
 
-  def test_place_ship_size_2_will_not_accept_smaller_or_larger_ships
-    @board.place_ship_size_2(['c2', 'c3', 'c4'])
+  def test_place_ship_size_3
+    @board.place_ship(['c2', 'c3', 'c4'])
 
-    refute @board.rows[2][1] == 'x'
-    refute @board.rows[2][2] == 'x'
-    refute @board.rows[2][3] == 'x'
+    assert @board.rows[2][1] == 'x'
+    assert @board.rows[2][2] == 'x'
+    assert @board.rows[2][3] == 'x'
   end
-
-  # def test_place_ship_size_3
-  #   @board.place_ship_size_2(['c2', 'c3', 'c4'])
-  #
-  #   assert @board.rows[2][1] == 'x'
-  #   assert @board.rows[2][2] == 'x'
-  #   assert @board.rows[2][3] == 'x'
-  # end
 end

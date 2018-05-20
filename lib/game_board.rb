@@ -9,13 +9,13 @@ class GameBoard
                      ['d1', 'd2', 'd3', 'd4']]
 
     @ships_size_2 = [['a1', 'a2'], ['a2', 'a3'], ['a3', 'a4'],\
-                    ['b1', 'b2'], ['b2', 'b3'], ['b3', 'b4'],\
-                    ['c1', 'c2'], ['c2', 'c3'], ['c3', 'c4'],\
-                    ['d1', 'd2'], ['d2', 'd3'], ['d3', 'd4'],\
-                    ['a1', 'b1'], ['a2', 'b2'], ['a3', 'b3'],\
-                    ['a4', 'b4'], ['b1', 'c1'], ['b2', 'c2'],\
-                    ['b3', 'c3'], ['b4', 'c4'], ['c1', 'd1'],\
-                    ['c2', 'd2'], ['c3', 'd3'], ['c4', 'd4']]
+                     ['b1', 'b2'], ['b2', 'b3'], ['b3', 'b4'],\
+                     ['c1', 'c2'], ['c2', 'c3'], ['c3', 'c4'],\
+                     ['d1', 'd2'], ['d2', 'd3'], ['d3', 'd4'],\
+                     ['a1', 'b1'], ['a2', 'b2'], ['a3', 'b3'],\
+                     ['a4', 'b4'], ['b1', 'c1'], ['b2', 'c2'],\
+                     ['b3', 'c3'], ['b4', 'c4'], ['c1', 'd1'],\
+                     ['c2', 'd2'], ['c3', 'd3'], ['c4', 'd4']]
 
     @ships_size_3 = [['a1', 'a2', 'a3'], ['a2', 'a3', 'a4'],\
                      ['b1', 'b2', 'b3'], ['b2', 'b3', 'b4'],\
@@ -27,11 +27,11 @@ class GameBoard
                      ['b3', 'c3', 'd3'], ['b4', 'c4', 'd4']]
   end
 
-  def pick_ship_placement_size_2
+  def pick_ship_placement_size_2_for_computer
     @ships_size_2.sample
   end
 
-  def pick_ship_placement_size_3(ship_size_2)
+  def pick_ship_placement_size_3_for_computer(ship_size_2)
     x = @ships_size_3.map do |ship|
       if ship.include? ship_size_2[0] || ship_size_2[1]
         ship = nil
@@ -42,27 +42,26 @@ class GameBoard
     x.compact.sample
   end
 
-  def place_ship_size_2(ship_points)
-    if ship_points.length == 2
-      ship_points.each do |point|
-        @rows.map do |row|
-          if row.include? point
-            row[row.index(point)] = 'x'
-          end
+  def pick_ship_placement_size_2_for_human(pick)
+    if @ships_size_2.include? pick.split(' ')
+      return pick.split(' ')
+    else
+      puts "You entered an incorrect guess\n
+      either your ship is placed off the board or\n
+      you forgot to put a space in between your\n
+      ship's coordinates. Try Again."
+      pick_again = gets.chomp
+      pick_ship_placement_size_2_for_human(pick_again)
+    end
+  end
+
+  def place_ship(ship_points)
+    ship_points.each do |point|
+      @rows.map do |row|
+        if row.include? point
+          row[row.index(point)] = 'x'
         end
       end
     end
   end
-
-  # def place_ship_size_2(ship_points)
-  #   if ship_points.length == 3
-  #     ship_points.each do |point|
-  #       @rows.map do |row|
-  #         if row.include? point
-  #           row[row.index(point)] = 'x'
-  #         end
-  #       end
-  #     end
-  #   end
-  # end
 end
