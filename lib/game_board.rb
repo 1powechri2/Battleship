@@ -9,12 +9,12 @@ class GameBoard
              ['d1', 'd2', 'd3', 'd4']]
   end
 
-  def change_space_objects(ship_points)
+  def place_ships(ship_points)
     ship_points.each do |point|
       @rows.map do |row|
         if row.include? point
           row[row.index(point)] = 'x'
-        end 
+        end
       end
     end
   end

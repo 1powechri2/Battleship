@@ -24,8 +24,8 @@ class GameBoardTest < Minitest::Test
     assert_equal 'a1', @board.rows[0][0]
   end
 
-  def test_change_space_objects
-    @board.change_space_objects(['c2', 'c3'])
+  def test_place_ships
+    @board.place_ships(['c2', 'c3'])
 
     assert_equal 'x', @board.rows[2][1]
     assert_equal 'x', @board.rows[2][2]
