@@ -20,7 +20,25 @@ class Battleship
     @grid_positions.values.sample
   end
 
-  def battleship_hit?(shot)
+  def player_battleship_hit?(shot)
     @player_board.rows[shot[0]][shot[1]] == 'x'
+  end
+
+  def computer_battleship_hit?
+    @computer_board.rows[shot[0]][shot[1]] == 'x'
+  end
+
+  def mark_hit_player_ship(hit, shot_position)
+    if hit == true
+      @player_board.rows[shot_position[0]][shot_position[1]] = 'o'
+    end
+  end
+
+  def battleship_size_2_sunk?(ship)
+    coord_1 = @grid_positions[ship.split(' ')[0].to_sym]
+    coord_2 = @grid_positions[ship.split(' ')[1].to_sym]
+    ship_keel = @player_board.rows[coord_1[0]][coord_1[1]]
+    ship_bough = @player_board.rows[coord_2[0]][coord_2[1]]
+    ship_keel == 'o' && ship_bough == 'o'
   end
 end
