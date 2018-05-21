@@ -28,16 +28,25 @@ class GameBoardTest < Minitest::Test
     assert_equal 2, @board.pick_ship_placement_size_2_for_computer.length
   end
 
-  def test_pick_ship_placement_size_3_forcomputer
+  def test_ship_size_2_will_not_overlap_ship_size_3
     ship_size_2 = @board.pick_ship_placement_size_2_for_computer
-    ship_size_3 = @board.pick_ship_placement_size_3_for_computer(ship_size_2)
+    no_overlap = @board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+
+    refute no_overlap.include? ship_size_2
+  end
+
+  def test_pick_ship_placement_size_3_for_computer
+    ship_size_2 = @board.pick_ship_placement_size_2_for_computer
+    no_overlap = @board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+    ship_size_3 = @board.pick_ship_placement_size_3_for_computer(no_overlap)
 
     assert_equal 3, ship_size_3.length
   end
 
   def test_computer_ships_do_not_overlap
     ship_size_2 = @board.pick_ship_placement_size_2_for_computer
-    ship_size_3 = @board.pick_ship_placement_size_3_for_computer(ship_size_2)
+    no_overlap = @board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+    ship_size_3 = @board.pick_ship_placement_size_3_for_computer(no_overlap)
 
     refute ship_size_3.include? ship_size_2[0]
     refute ship_size_3.include? ship_size_2[1]
@@ -48,6 +57,16 @@ class GameBoardTest < Minitest::Test
     ship_size_2 = @board.pick_ship_placement_size_2_for_human(pick)
 
     assert_equal ['a4', 'b4'], ship_size_2
+  end
+
+  def test_pick_ship_placement_size_3_for_human
+    pick_1 = 'a4 b4'
+    pick_2 = 'b3 c3 d3'
+    ship_size_2 = @board.pick_ship_placement_size_2_for_human(pick_1)
+    no_overlap = @board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+    ship_size_3 = @board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
+
+    assert_equal ['b3', 'c3', 'd3'], ship_size_3
   end
 
   def test_place_ship_size_2

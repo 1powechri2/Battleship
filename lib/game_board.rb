@@ -31,15 +31,20 @@ class GameBoard
     @ships_size_2.sample
   end
 
-  def pick_ship_placement_size_3_for_computer(ship_size_2)
-    x = @ships_size_3.map do |ship|
-      if ship.include? ship_size_2[0] || ship_size_2[1]
+  def pick_ship_placement_size_3_for_computer(ship_3)
+    ship_3.compact.sample
+  end
+
+  def ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+    @ships_size_3.map do |ship|
+      if ship.include? ship_size_2[0]
+        ship = nil
+      elsif ship.include? ship_size_2[1]
         ship = nil
       else
         ship
       end
     end
-    x.compact.sample
   end
 
   def pick_ship_placement_size_2_for_human(pick)
@@ -50,6 +55,20 @@ class GameBoard
       either your ship is placed off the board or\n
       you forgot to put a space in between your\n
       ship's coordinates. Try Again."
+      pick_again = gets.chomp
+      pick_ship_placement_size_2_for_human(pick_again)
+    end
+  end
+
+  def pick_ship_placement_size_3_for_human(no_overlap, pick)
+    if no_overlap.include? pick.split(' ')
+      return pick.split(' ')
+    else
+      puts "You entered an incorrect guess\n
+      either your ship is placed off the board or\n
+      you forgot to put a space in between your\n
+      ship's coordinates or your ship is overlaping\n
+      your other ship. Try Again."
       pick_again = gets.chomp
       pick_ship_placement_size_2_for_human(pick_again)
     end
