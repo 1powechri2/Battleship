@@ -3,7 +3,7 @@ class Battleship
               :player_board,
               :computer_board
 
-  def initialize(player_board, comp_board)
+  def initialize(player_board, comp_board, game_display)
     @player_board = player_board
     @computer_board = comp_board
     @grid_positions = {a1:[0, 0], a2:[0, 1], a3:[0, 2], a4:[0, 3],\

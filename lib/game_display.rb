@@ -1,4 +1,4 @@
-class BoardDisplay
+class GameDisplay
   def initialize
     @header = '.A B C D'
     @rows   = ['1       ',\
