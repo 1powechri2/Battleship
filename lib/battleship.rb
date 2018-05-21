@@ -19,4 +19,8 @@ class Battleship
   def computer_retrieve_grid_position
     @grid_positions.values.sample
   end
+
+  def battleship_hit?(shot)
+    @player_board.rows[shot[0]][shot[1]] == 'x'
+  end
 end

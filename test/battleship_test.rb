@@ -35,6 +35,18 @@ class BattleShipTest < Minitest::Test
     assert_equal expected, actual
   end
 
+  def test_setup_of_computer_board
+    ship_size_2 = @battleship.computer_board.pick_ship_placement_size_2_for_computer
+    no_overlap  = @battleship.computer_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+    ship_size_3 = @battleship.computer_board.pick_ship_placement_size_3_for_computer(no_overlap)
+    @battleship.computer_board.place_ship(ship_size_2)
+    @battleship.computer_board.place_ship(ship_size_3)
+
+    count_ship_points = @battleship.computer_board.rows.flatten.count('x')
+
+    assert_equal 5, count_ship_points
+  end
+
   def test_grid_points
     assert_equal [0, 0], @battleship.grid_positions[:a1]
     assert_equal [3, 3], @battleship.grid_positions[:d4]
@@ -52,5 +64,27 @@ class BattleShipTest < Minitest::Test
 
     assert_equal Array, computer_guess.class
     assert_equal 2, computer_guess.length
+  end
+
+  def test_battleship_hit
+    pick_1 = 'a4 b4'
+    pick_2 = 'b3 c3 d3'
+    ship_size_2 = @battleship.player_board.pick_ship_placement_size_2_for_human(pick_1)
+    no_overlap  = @battleship.player_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+    ship_size_3 = @battleship.player_board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
+    @battleship.player_board.place_ship(ship_size_2)
+    @battleship.player_board.place_ship(ship_size_3)
+
+    shot_guess_1 = 'a4'
+
+    shot_1 = @battleship.player_retrieve_grid_position(shot_guess_1)
+
+    assert @battleship.battleship_hit?(shot_1)
+
+    shot_guess_1 = 'd1'
+
+    shot_1 = @battleship.player_retrieve_grid_position(shot_guess_1)
+
+    refute @battleship.battleship_hit?(shot_1)
   end
 end
