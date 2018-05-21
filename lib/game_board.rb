@@ -48,8 +48,8 @@ class GameBoard
   end
 
   def pick_ship_placement_size_2_for_human(pick)
-    if @ships_size_2.include? pick.split(' ')
-      return pick.split(' ')
+    if @ships_size_2.include? pick.downcase.split(' ')
+      return pick.downcase.split(' ')
     else
       puts "You entered an incorrect guess\n
       either your ship is placed off the board or\n
@@ -61,8 +61,8 @@ class GameBoard
   end
 
   def pick_ship_placement_size_3_for_human(no_overlap, pick)
-    if no_overlap.include? pick.split(' ')
-      return pick.split(' ')
+    if no_overlap.include? pick.downcase.split(' ')
+      return pick.downcase.split(' ')
     else
       puts "You entered an incorrect guess\n
       either your ship is placed off the board or\n

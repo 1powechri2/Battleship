@@ -53,7 +53,7 @@ class GameBoardTest < Minitest::Test
   end
 
   def test_pick_ship_placement_size_2_for_human
-    pick = 'a4 b4'
+    pick = 'A4 B4'
     ship_size_2 = @board.pick_ship_placement_size_2_for_human(pick)
 
     assert_equal ['a4', 'b4'], ship_size_2
@@ -61,7 +61,7 @@ class GameBoardTest < Minitest::Test
 
   def test_pick_ship_placement_size_3_for_human
     pick_1 = 'a4 b4'
-    pick_2 = 'b3 c3 d3'
+    pick_2 = 'b3 C3 d3'
     ship_size_2 = @board.pick_ship_placement_size_2_for_human(pick_1)
     no_overlap = @board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
     ship_size_3 = @board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
