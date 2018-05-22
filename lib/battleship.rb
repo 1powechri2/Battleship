@@ -84,4 +84,14 @@ class Battleship
       @humanoid_game_display.rows[display_point[0]][display_point[1]] = 'm'
     end
   end
+
+  def computer_game_display_hits_and_misses(shot_hit, shot_coordinate)
+    display_key = @grid_positions.key(shot_coordinate)
+    display_point = @computer_game_display.display_positions[display_key]
+    if shot_hit == true
+      @computer_game_display.rows[display_point[0]][display_point[1]] = 'o'
+    elsif shot_hit == false
+      @computer_game_display.rows[display_point[0]][display_point[1]] = 'm'
+    end
+  end
 end
