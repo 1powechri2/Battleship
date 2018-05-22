@@ -24,13 +24,19 @@ class Battleship
     @player_board.rows[shot[0]][shot[1]] == 'x'
   end
 
-  def computer_battleship_hit?
+  def computer_battleship_hit?(shot)
     @computer_board.rows[shot[0]][shot[1]] == 'x'
   end
 
   def mark_hit_player_ship(hit, shot_position)
     if hit == true
       @player_board.rows[shot_position[0]][shot_position[1]] = 'o'
+    end
+  end
+
+  def mark_hit_computer_ship(hit, shot_position)
+    if hit == true
+      @pcomputer_board.rows[shot_position[0]][shot_position[1]] = 'o'
     end
   end
 
@@ -41,7 +47,18 @@ class Battleship
     end.all?
   end
 
-  def count_hits
+  def computer_battleship_sunk?(ship)
+    ship.map do |coordinate|
+      position = @grid_positions[coordinate.to_sym]
+      @computer_board.rows[position[0]][position[1]] == 'o'
+    end.all?
+  end
+
+  def count_player_hits
     @player_board.rows.flatten.count('o')
+  end
+
+  def count_computer_hits
+    @computer_board.rows.flatten.count('o')
   end
 end

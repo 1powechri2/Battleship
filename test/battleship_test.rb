@@ -9,6 +9,14 @@ class BattleShipTest < Minitest::Test
     humanoid  = GameBoard.new
     display   = GameDisplay.new
     @battleship = Battleship.new(humanoid, computer, display)
+
+    @pick_1 = 'a4 b4'
+    @pick_2 = 'b3 c3 d3'
+    ship_size_2 = @battleship.player_board.pick_ship_placement_size_2_for_human(@pick_1)
+    no_overlap  = @battleship.player_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+    ship_size_3 = @battleship.player_board.pick_ship_placement_size_3_for_human(no_overlap, @pick_2)
+    @board_placement_1 = @battleship.player_board.place_ship(ship_size_2)
+    @board_placement_2 = @battleship.player_board.place_ship(ship_size_3)
   end
 
   def test_setup_instances
@@ -18,13 +26,8 @@ class BattleShipTest < Minitest::Test
   end
 
   def test_setup_of_player_board
-    pick_1 = 'a4 b4'
-    pick_2 = 'b3 c3 d3'
-    ship_size_2 = @battleship.player_board.pick_ship_placement_size_2_for_human(pick_1)
-    no_overlap  = @battleship.player_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
-    ship_size_3 = @battleship.player_board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
-    @battleship.player_board.place_ship(ship_size_2)
-    @battleship.player_board.place_ship(ship_size_3)
+    @board_placement_1
+    @board_placement_2
 
     expected = [['a1', 'a2', 'a3', 'x'],\
                 ['b1', 'b2', 'x', 'x'],\
@@ -68,13 +71,8 @@ class BattleShipTest < Minitest::Test
   end
 
   def test_battleship_hit
-    pick_1 = 'a4 b4'
-    pick_2 = 'b3 c3 d3'
-    ship_size_2 = @battleship.player_board.pick_ship_placement_size_2_for_human(pick_1)
-    no_overlap  = @battleship.player_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
-    ship_size_3 = @battleship.player_board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
-    @battleship.player_board.place_ship(ship_size_2)
-    @battleship.player_board.place_ship(ship_size_3)
+    @board_placement_1
+    @board_placement_2
 
     shot_guess_1 = 'a4'
     shot_1 = @battleship.player_retrieve_grid_position(shot_guess_1)
@@ -88,13 +86,8 @@ class BattleShipTest < Minitest::Test
   end
 
   def test_mark_hit_player_ship
-    pick_1 = 'a4 b4'
-    pick_2 = 'b3 c3 d3'
-    ship_size_2 = @battleship.player_board.pick_ship_placement_size_2_for_human(pick_1)
-    no_overlap  = @battleship.player_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
-    ship_size_3 = @battleship.player_board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
-    @battleship.player_board.place_ship(ship_size_2)
-    @battleship.player_board.place_ship(ship_size_3)
+    @board_placement_1
+    @board_placement_2
 
     shot_guess_1 = 'a4'
     shot_1 = @battleship.player_retrieve_grid_position(shot_guess_1)
@@ -113,13 +106,8 @@ class BattleShipTest < Minitest::Test
   end
 
   def test_player_battleship_size_2_sunk?
-    pick_1 = 'a4 b4'
-    pick_2 = 'b3 c3 d3'
-    ship_size_2 = @battleship.player_board.pick_ship_placement_size_2_for_human(pick_1)
-    no_overlap  = @battleship.player_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
-    ship_size_3 = @battleship.player_board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
-    @battleship.player_board.place_ship(ship_size_2)
-    @battleship.player_board.place_ship(ship_size_3)
+    @board_placement_1
+    @board_placement_2
 
     shot_guess_1 = 'a4'
     shot_1 = @battleship.player_retrieve_grid_position(shot_guess_1)
@@ -127,7 +115,7 @@ class BattleShipTest < Minitest::Test
 
     @battleship.mark_hit_player_ship(hit, shot_1)
 
-    refute @battleship.player_battleship_sunk?(pick_1)
+    refute @battleship.player_battleship_sunk?(@pick_1)
 
     shot_guess_2 = 'b4'
     shot_2 = @battleship.player_retrieve_grid_position(shot_guess_2)
@@ -135,17 +123,12 @@ class BattleShipTest < Minitest::Test
 
     @battleship.mark_hit_player_ship(hit, shot_2)
 
-    assert @battleship.player_battleship_sunk?(pick_1)
+    assert @battleship.player_battleship_sunk?(@pick_1)
   end
 
   def test_battleship_size_3_sunk?
-    pick_1 = 'a4 b4'
-    pick_2 = 'b3 c3 d3'
-    ship_size_2 = @battleship.player_board.pick_ship_placement_size_2_for_human(pick_1)
-    no_overlap  = @battleship.player_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
-    ship_size_3 = @battleship.player_board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
-    @battleship.player_board.place_ship(ship_size_2)
-    @battleship.player_board.place_ship(ship_size_3)
+    @board_placement_1
+    @board_placement_2
 
     shot_guess_1 = 'b3'
     shot_1 = @battleship.player_retrieve_grid_position(shot_guess_1)
@@ -159,7 +142,7 @@ class BattleShipTest < Minitest::Test
 
     @battleship.mark_hit_player_ship(hit, shot_2)
 
-    refute @battleship.player_battleship_sunk?(pick_2)
+    refute @battleship.player_battleship_sunk?(@pick_2)
 
     shot_guess_3 = 'd3'
     shot_3 = @battleship.player_retrieve_grid_position(shot_guess_3)
@@ -167,17 +150,12 @@ class BattleShipTest < Minitest::Test
 
     @battleship.mark_hit_player_ship(hit, shot_3)
 
-    assert @battleship.player_battleship_sunk?(pick_2)
+    assert @battleship.player_battleship_sunk?(@pick_2)
   end
 
-  def test_count_hits
-    pick_1 = 'a4 b4'
-    pick_2 = 'b3 c3 d3'
-    ship_size_2 = @battleship.player_board.pick_ship_placement_size_2_for_human(pick_1)
-    no_overlap  = @battleship.player_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
-    ship_size_3 = @battleship.player_board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
-    @battleship.player_board.place_ship(ship_size_2)
-    @battleship.player_board.place_ship(ship_size_3)
+  def test_count_player_hits
+    @board_placement_1
+    @board_placement_2
 
     shot_guess_1 = 'b3'
     shot_1 = @battleship.player_retrieve_grid_position(shot_guess_1)
@@ -209,6 +187,6 @@ class BattleShipTest < Minitest::Test
 
     @battleship.mark_hit_player_ship(hit, shot_5)
 
-    assert_equal 4, @battleship.count_hits
+    assert_equal 4, @battleship.count_player_hits
   end
 end
