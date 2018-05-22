@@ -1,20 +1,20 @@
 require './test/test_helper'
-require './lib/battleship'
+require './lib/battleship_methods'
 require './lib/game_board'
 require './lib/game_display'
 
-class BattleShipTest < Minitest::Test
+class BattleshipMethodsTest < Minitest::Test
   def setup
     computer  = GameBoard.new
     humanoid  = GameBoard.new
     computer_display   = GameDisplay.new
     humanoid_display   = GameDisplay.new
-    @battleship = Battleship.new(humanoid, computer, computer_display,\
+    @battleship = BattleshipMethods.new(humanoid, computer, computer_display,\
                                  humanoid_display)
   end
 
   def test_setup_instances
-    assert_instance_of Battleship, @battleship
+    assert_instance_of BattleshipMethods, @battleship
     assert_instance_of GameBoard, @battleship.player_board
     assert_instance_of GameBoard, @battleship.computer_board
   end
