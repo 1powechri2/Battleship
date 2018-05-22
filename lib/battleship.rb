@@ -1,11 +1,23 @@
 class Battleship
   attr_reader :grid_positions,
               :player_board,
-              :computer_board
+              :computer_board,
+              :computer_game_display,
+              :humanoid_game_display,
+              :mock_computer_board
 
-  def initialize(player_board, comp_board, game_display)
+  def initialize(player_board, comp_board, computer_game_display,\
+                 humanoid_game_display)
+                 
     @player_board = player_board
     @computer_board = comp_board
+    @computer_game_display = computer_game_display
+    @humanoid_game_display = humanoid_game_display
+    @mock_computer_board = [['a1', 'a2', 'a3', 'a4'],\
+                            ['x', 'x', 'x', 'b4'],\
+                            ['c1', 'c2', 'c3', 'c4'],\
+                            ['x', 'x', 'd3', 'd4']]
+
     @grid_positions = {a1:[0, 0], a2:[0, 1], a3:[0, 2], a4:[0, 3],\
                        b1:[1, 0], b2:[1, 1], b3:[1, 2], b4:[1, 3],\
                        c1:[2, 0], c2:[2, 1], c3:[2, 2], c4:[2, 3],\

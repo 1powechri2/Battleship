@@ -7,8 +7,10 @@ class BattleShipTest < Minitest::Test
   def setup
     computer  = GameBoard.new
     humanoid  = GameBoard.new
-    display   = GameDisplay.new
-    @battleship = Battleship.new(humanoid, computer, display)
+    computer_display   = GameDisplay.new
+    humanoid_display   = GameDisplay.new
+    @battleship = Battleship.new(humanoid, computer, computer_display,\
+                                 humanoid_display)
 
     @pick_1 = 'a4 b4'
     @pick_2 = 'b3 c3 d3'
@@ -46,9 +48,9 @@ class BattleShipTest < Minitest::Test
     @battleship.computer_board.place_ship(ship_size_2)
     @battleship.computer_board.place_ship(ship_size_3)
 
-    count_ship_points = @battleship.computer_board.rows.flatten.count('x')
+    count_ship_hit_points = @battleship.computer_board.rows.flatten.count('x')
 
-    assert_equal 5, count_ship_points
+    assert_equal 5, count_ship_hit_points
   end
 
   def test_grid_points
@@ -63,14 +65,14 @@ class BattleShipTest < Minitest::Test
     assert_equal [0, 0], grid_value
   end
 
-  def test_computer_retrieve_grid_value
+  def test_computer_retrieve_grid_position
     computer_guess = @battleship.computer_retrieve_grid_position
 
     assert_equal Array, computer_guess.class
     assert_equal 2, computer_guess.length
   end
 
-  def test_battleship_hit
+  def test_player_battleship_hit
     @board_placement_1
     @board_placement_2
 
@@ -79,10 +81,10 @@ class BattleShipTest < Minitest::Test
 
     assert @battleship.player_battleship_hit?(shot_1)
 
-    shot_guess_1 = 'd1'
-    shot_1 = @battleship.player_retrieve_grid_position(shot_guess_1)
+    shot_guess_2 = 'd1'
+    shot_2 = @battleship.player_retrieve_grid_position(shot_guess_2)
 
-    refute @battleship.player_battleship_hit?(shot_1)
+    refute @battleship.player_battleship_hit?(shot_2)
   end
 
   def test_mark_hit_player_ship
