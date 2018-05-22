@@ -34,11 +34,14 @@ class Battleship
     end
   end
 
-  def battleship_size_2_sunk?(ship)
-    coord_1 = @grid_positions[ship.split(' ')[0].to_sym]
-    coord_2 = @grid_positions[ship.split(' ')[1].to_sym]
-    ship_keel = @player_board.rows[coord_1[0]][coord_1[1]]
-    ship_bough = @player_board.rows[coord_2[0]][coord_2[1]]
-    ship_keel == 'o' && ship_bough == 'o'
+  def player_battleship_sunk?(ship)
+    ship.split(' ').map do |coordinate|
+      position = @grid_positions[coordinate.to_sym]
+      @player_board.rows[position[0]][position[1]] == 'o'
+    end.all?
+  end
+
+  def count_hits
+    @player_board.rows.flatten.count('o')
   end
 end
