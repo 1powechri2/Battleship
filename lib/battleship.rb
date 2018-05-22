@@ -67,4 +67,21 @@ class Battleship
   def count_computer_hits
     @computer_board.rows.flatten.count('o')
   end
+
+  def humanoid_game_display_records_ships(ship)
+    ship.split(' ').each do |coordinate|
+      position = @humanoid_game_display.display_positions[coordinate.to_sym]
+      @humanoid_game_display.rows[position[0]][position[1]] = 'x'
+    end
+  end
+
+  def humanoid_game_display_hits_and_misses(shot_hit, shot_coordinate)
+    display_key = @grid_positions.key(shot_coordinate)
+    display_point = @humanoid_game_display.display_positions[display_key]
+    if shot_hit == true
+      @humanoid_game_display.rows[display_point[0]][display_point[1]] = 'o'
+    elsif shot_hit == false
+      @humanoid_game_display.rows[display_point[0]][display_point[1]] = 'm'
+    end
+  end
 end
