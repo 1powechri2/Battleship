@@ -1,4 +1,7 @@
+require './lib/messages'
+
 class GameBoard
+  include Messages
   attr_reader :rows,
               :spaces
 
@@ -51,10 +54,7 @@ class GameBoard
     if @ships_size_2.include? pick.downcase.split(' ')
       return pick.downcase.split(' ')
     else
-      puts "You entered an incorrect guess\n
-      either your ship is placed off the board or\n
-      you forgot to put a space in between your\n
-      ship's coordinates. Try Again."
+      pick_ship_placement_size_2_error_messages
       pick_again = gets.chomp
       pick_ship_placement_size_2_for_human(pick_again)
     end
@@ -64,13 +64,9 @@ class GameBoard
     if no_overlap.include? pick.downcase.split(' ')
       return pick.downcase.split(' ')
     else
-      puts "You entered an incorrect guess\n
-      either your ship is placed off the board or\n
-      you forgot to put a space in between your\n
-      ship's coordinates or your ship is overlaping\n
-      your other ship. Try Again."
+      pick_ship_placement_size_3_error_messages
       pick_again = gets.chomp
-      pick_ship_placement_size_3_for_human(pick_again)
+      pick_ship_placement_size_3_for_human(no_overlap, pick_again)
     end
   end
 
