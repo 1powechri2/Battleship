@@ -12,10 +12,10 @@ class GameBoardTest < Minitest::Test
 
   def test_it_is_4x4_2_dimensional_array
     actual   = @board.rows
-    expected = [['a1', 'a2', 'a3', 'a4'],\
-                ['b1', 'b2', 'b3', 'b4'],\
-                ['c1', 'c2', 'c3', 'c4'],\
-                ['d1', 'd2', 'd3', 'd4']]
+    expected = [['a1', 'b1', 'c1', 'd1'],\
+                ['a2', 'b2', 'c2', 'd2'],\
+                ['a3', 'b3', 'c3', 'd3'],\
+                ['a4', 'b4', 'c4', 'd4']]
 
     assert_equal expected, actual
   end
@@ -72,15 +72,15 @@ class GameBoardTest < Minitest::Test
   def test_place_ship_size_2
     @board.place_ship(['c2', 'c3'])
 
-    assert @board.rows[2][1] == 'x'
+    assert @board.rows[1][2] == 'x'
     assert @board.rows[2][2] == 'x'
   end
 
   def test_place_ship_size_3
     @board.place_ship(['c2', 'c3', 'c4'])
 
-    assert @board.rows[2][1] == 'x'
+    assert @board.rows[1][2] == 'x'
     assert @board.rows[2][2] == 'x'
-    assert @board.rows[2][3] == 'x'
+    assert @board.rows[3][2] == 'x'
   end
 end

@@ -1,9 +1,11 @@
 class BattleshipMethods
-  attr_reader :grid_positions,
-              :player_board,
+  attr_reader :player_board,
               :computer_board,
               :computer_game_display,
-              :humanoid_game_display
+              :humanoid_game_display,
+              :grid_positions,
+              :player_guesses,
+              :comp_guesses
 
   def initialize(player_board, comp_board, computer_game_display,\
                  humanoid_game_display)
@@ -16,14 +18,29 @@ class BattleshipMethods
                        a2:[1, 0], b2:[1, 1], c2:[1, 2], d2:[1, 3],\
                        a3:[2, 0], b3:[2, 1], c3:[2, 2], d3:[2, 3],\
                        a4:[3, 0], b4:[3, 1], c4:[3, 2], d4:[3, 3]}
+    @player_guesses = ['a1','a2','a3','a4','b1','b2','b3','b4',\
+                       'c1','c2','c3','c4','d1','d2','d3','d4']
+    @comp_guesses   = [[0, 0], [0, 1], [0, 2], [0, 3],\
+                       [1, 0], [1, 1], [1, 2], [1, 3],\
+                       [2, 0], [2, 1], [2, 2], [2, 3],\
+                       [3, 0], [3, 1], [3, 2], [3, 3]]
   end
 
   def player_retrieve_grid_position(guess)
-    @grid_positions[guess.downcase.to_sym]
+    if @player_guesses.include? guess.downcase
+      @player_guesses.delete(guess.downcase)
+      return @grid_positions[guess.downcase.to_sym]
+    else
+      puts 'you have to pick something on the board, try again'
+      pick_again = gets.chomp
+      player_retrieve_grid_position(pick_again)
+    end
   end
 
   def computer_retrieve_grid_position
-    @grid_positions.values.sample
+    guess = @comp_guesses.sample
+    @comp_guesses.delete(guess)
+    return guess
   end
 
   def player_battleship_hit?(shot)

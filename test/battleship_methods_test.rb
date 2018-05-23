@@ -5,8 +5,8 @@ require './lib/game_display'
 
 class BattleshipMethodsTest < Minitest::Test
   def setup
-    computer  = GameBoard.new
-    humanoid  = GameBoard.new
+    computer           = GameBoard.new
+    humanoid           = GameBoard.new
     computer_display   = GameDisplay.new
     humanoid_display   = GameDisplay.new
     @battleship = BattleshipMethods.new(humanoid, computer, computer_display,\
@@ -28,10 +28,10 @@ class BattleshipMethodsTest < Minitest::Test
     @battleship.player_board.place_ship(ship_size_2)
     @battleship.player_board.place_ship(ship_size_3)
 
-    expected = [['a1', 'a2', 'a3', 'x'],\
-                ['b1', 'b2', 'x', 'x'],\
-                ['c1', 'c2', 'x', 'c4'],\
-                ['d1', 'd2', 'x', 'd4']]
+    expected = [['a1', 'b1', 'c1', 'd1'],\
+                ['a2', 'b2', 'c2', 'd2'],\
+                ['a3', 'x', 'x', 'x'],\
+                ['x', 'x', 'c4', 'd4']]
 
     actual   = @battleship.player_board.rows
 
@@ -59,6 +59,14 @@ class BattleshipMethodsTest < Minitest::Test
     assert_equal [3, 3], @battleship.grid_positions[:d4]
   end
 
+  def test_player_has_guesses
+    assert_equal 16, @battleship.player_guesses.length
+  end
+
+  def test_computer_has_guesses
+    assert_equal 16, @battleship.comp_guesses.length
+  end
+
   def test_player_retrieve_grid_position
     player_guess = 'A1'
     grid_value = @battleship.player_retrieve_grid_position(player_guess)
@@ -66,11 +74,26 @@ class BattleshipMethodsTest < Minitest::Test
     assert_equal [0, 0], grid_value
   end
 
+  def test_player_guess_deleted_after_guessed
+    player_guess = 'A1'
+    grid_value = @battleship.player_retrieve_grid_position(player_guess)
+
+    refute @battleship.player_guesses.include? 'a1'
+  end
+
   def test_computer_retrieve_grid_position
     computer_guess = @battleship.computer_retrieve_grid_position
 
     assert_equal Array, computer_guess.class
     assert_equal 2, computer_guess.length
+    assert_equal Integer, computer_guess[0].class
+    assert_equal Integer, computer_guess[1].class
+  end
+
+  def test_computer_guess_deleted_after_guessed
+    comp_guess = @battleship.computer_retrieve_grid_position
+
+    refute @battleship.comp_guesses.include? comp_guess
   end
 
   def test_player_battleship_hit
@@ -82,7 +105,7 @@ class BattleshipMethodsTest < Minitest::Test
     @battleship.player_board.place_ship(ship_size_2)
     @battleship.player_board.place_ship(ship_size_3)
 
-    computer_mock_shot = [0, 3]
+    computer_mock_shot = [3, 0]
 
     assert @battleship.player_battleship_hit?(computer_mock_shot)
   end
@@ -96,15 +119,16 @@ class BattleshipMethodsTest < Minitest::Test
     @battleship.player_board.place_ship(ship_size_2)
     @battleship.player_board.place_ship(ship_size_3)
 
-    computer_mock_shot = [0, 3]
-    hit   = @battleship.player_battleship_hit?(computer_mock_shot)
+    comp_shot = [3, 0]
 
-    @battleship.mark_hit_player_ship(hit, computer_mock_shot)
+    hit = @battleship.player_battleship_hit?(comp_shot)
 
-    expected = [['a1', 'a2', 'a3', 'o'],\
-                ['b1', 'b2', 'x', 'x'],\
-                ['c1', 'c2', 'x', 'c4'],\
-                ['d1', 'd2', 'x', 'd4']]
+    @battleship.mark_hit_player_ship(hit, comp_shot)
+
+    expected = [['a1', 'b1', 'c1', 'd1'],\
+                ['a2', 'b2', 'c2', 'd2'],\
+                ['a3', 'x', 'x', 'x'],\
+                ['o', 'x', 'c4', 'd4']]
 
     actual   = @battleship.player_board.rows
 
@@ -504,10 +528,10 @@ class BattleshipMethodsTest < Minitest::Test
     @battleship.humanoid_game_display_records_ships(ship_size_2)
     @battleship.humanoid_game_display_records_ships(ship_size_3)
 
-    expected = ['1      x',\
-                '2    x x',\
-                '3    x  ',\
-                '4    x  ']
+    expected = ['1       ',\
+                '2       ',\
+                '3  x x x',\
+                '4x x    ']
 
     actual   = @battleship.humanoid_game_display.rows
 
@@ -526,7 +550,7 @@ class BattleshipMethodsTest < Minitest::Test
     @battleship.humanoid_game_display_records_ships(ship_size_2)
     @battleship.humanoid_game_display_records_ships(ship_size_3)
 
-    computer_shot_1 = [1, 2]
+    computer_shot_1 = [3, 0]
     computer_shot_2 = [1, 0]
 
     shot_1_hit = @battleship.player_battleship_hit?(computer_shot_1)
@@ -535,92 +559,92 @@ class BattleshipMethodsTest < Minitest::Test
     @battleship.humanoid_game_display_hits_and_misses(shot_1_hit, computer_shot_1)
     @battleship.humanoid_game_display_hits_and_misses(shot_2_hit, computer_shot_2)
 
-    expected = ['1      x',\
-                '2m   o x',\
-                '3    x  ',\
-                '4    x  ']
+    expected = ['1       ',\
+                '2m      ',\
+                '3  x x x',\
+                '4o x    ']
 
     actual   = @battleship.humanoid_game_display.rows
 
     assert_equal expected, actual
   end
 
-  def test_computer_game_display_hits_and_misses
-    ship_size_2 = @battleship.computer_board.pick_ship_placement_size_2_for_computer
-    no_overlap  = @battleship.computer_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
-    ship_size_3 = @battleship.computer_board.pick_ship_placement_size_3_for_computer(no_overlap)
-    @battleship.computer_board.place_ship(ship_size_2)
-    @battleship.computer_board.place_ship(ship_size_3)
-
-    player_guess_1  = 'a1'
-    player_guess_2  = 'a2'
-    player_guess_3  = 'a3'
-    player_guess_4  = 'a4'
-    player_guess_5  = 'b1'
-    player_guess_6  = 'b2'
-    player_guess_7  = 'b3'
-    player_guess_8  = 'b4'
-    player_guess_9  = 'c1'
-    player_guess_10 = 'c2'
-    player_guess_11 = 'c3'
-    player_guess_12 = 'c4'
-    player_guess_13 = 'd1'
-    player_guess_14 = 'd2'
-    player_guess_15 = 'd3'
-    player_guess_16 = 'd4'
-
-    shot_pos_1  = @battleship.player_retrieve_grid_position(player_guess_1)
-    shot_pos_2  = @battleship.player_retrieve_grid_position(player_guess_2)
-    shot_pos_3  = @battleship.player_retrieve_grid_position(player_guess_3)
-    shot_pos_4  = @battleship.player_retrieve_grid_position(player_guess_4)
-    shot_pos_5  = @battleship.player_retrieve_grid_position(player_guess_5)
-    shot_pos_6  = @battleship.player_retrieve_grid_position(player_guess_6)
-    shot_pos_7  = @battleship.player_retrieve_grid_position(player_guess_7)
-    shot_pos_8  = @battleship.player_retrieve_grid_position(player_guess_8)
-    shot_pos_9  = @battleship.player_retrieve_grid_position(player_guess_9)
-    shot_pos_10 = @battleship.player_retrieve_grid_position(player_guess_10)
-    shot_pos_11 = @battleship.player_retrieve_grid_position(player_guess_11)
-    shot_pos_12 = @battleship.player_retrieve_grid_position(player_guess_12)
-    shot_pos_13 = @battleship.player_retrieve_grid_position(player_guess_13)
-    shot_pos_14 = @battleship.player_retrieve_grid_position(player_guess_14)
-    shot_pos_15 = @battleship.player_retrieve_grid_position(player_guess_15)
-    shot_pos_16 = @battleship.player_retrieve_grid_position(player_guess_16)
-
-    shot_hit_1  = @battleship.computer_battleship_hit?(shot_pos_1)
-    shot_hit_2  = @battleship.computer_battleship_hit?(shot_pos_2)
-    shot_hit_3  = @battleship.computer_battleship_hit?(shot_pos_3)
-    shot_hit_4  = @battleship.computer_battleship_hit?(shot_pos_4)
-    shot_hit_5  = @battleship.computer_battleship_hit?(shot_pos_5)
-    shot_hit_6  = @battleship.computer_battleship_hit?(shot_pos_6)
-    shot_hit_7  = @battleship.computer_battleship_hit?(shot_pos_7)
-    shot_hit_8  = @battleship.computer_battleship_hit?(shot_pos_8)
-    shot_hit_9  = @battleship.computer_battleship_hit?(shot_pos_9)
-    shot_hit_10 = @battleship.computer_battleship_hit?(shot_pos_10)
-    shot_hit_11 = @battleship.computer_battleship_hit?(shot_pos_11)
-    shot_hit_12 = @battleship.computer_battleship_hit?(shot_pos_12)
-    shot_hit_13 = @battleship.computer_battleship_hit?(shot_pos_13)
-    shot_hit_14 = @battleship.computer_battleship_hit?(shot_pos_14)
-    shot_hit_15 = @battleship.computer_battleship_hit?(shot_pos_15)
-    shot_hit_16 = @battleship.computer_battleship_hit?(shot_pos_16)
-
-    @battleship.computer_game_display_hits_and_misses(shot_hit_1, shot_pos_1)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_2, shot_pos_2)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_3, shot_pos_3)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_4, shot_pos_4)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_5, shot_pos_5)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_6, shot_pos_6)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_7, shot_pos_7)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_8, shot_pos_8)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_9, shot_pos_9)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_10, shot_pos_10)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_11, shot_pos_11)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_12, shot_pos_12)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_13, shot_pos_13)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_14, shot_pos_14)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_15, shot_pos_15)
-    @battleship.computer_game_display_hits_and_misses(shot_hit_16, shot_pos_16)
-
-    assert_equal 5, @battleship.computer_game_display.rows.join.count('o')
-    assert_equal 11, @battleship.computer_game_display.rows.join.count('m')
-  end
+  # def test_computer_game_display_hits_and_misses
+  #   ship_size_2 = @battleship.computer_board.pick_ship_placement_size_2_for_computer
+  #   no_overlap  = @battleship.computer_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+  #   ship_size_3 = @battleship.computer_board.pick_ship_placement_size_3_for_computer(no_overlap)
+  #   @battleship.computer_board.place_ship(ship_size_2)
+  #   @battleship.computer_board.place_ship(ship_size_3)
+  #
+  #   player_guess_1  = 'a1'
+  #   player_guess_2  = 'a2'
+  #   player_guess_3  = 'a3'
+  #   player_guess_4  = 'a4'
+  #   player_guess_5  = 'b1'
+  #   player_guess_6  = 'b2'
+  #   player_guess_7  = 'b3'
+  #   player_guess_8  = 'b4'
+  #   player_guess_9  = 'c1'
+  #   player_guess_10 = 'c2'
+  #   player_guess_11 = 'c3'
+  #   player_guess_12 = 'c4'
+  #   player_guess_13 = 'd1'
+  #   player_guess_14 = 'd2'
+  #   player_guess_15 = 'd3'
+  #   player_guess_16 = 'd4'
+  #
+  #   shot_pos_1  = @battleship.player_retrieve_grid_position(player_guess_1)
+  #   shot_pos_2  = @battleship.player_retrieve_grid_position(player_guess_2)
+  #   shot_pos_3  = @battleship.player_retrieve_grid_position(player_guess_3)
+  #   shot_pos_4  = @battleship.player_retrieve_grid_position(player_guess_4)
+  #   shot_pos_5  = @battleship.player_retrieve_grid_position(player_guess_5)
+  #   shot_pos_6  = @battleship.player_retrieve_grid_position(player_guess_6)
+  #   shot_pos_7  = @battleship.player_retrieve_grid_position(player_guess_7)
+  #   shot_pos_8  = @battleship.player_retrieve_grid_position(player_guess_8)
+  #   shot_pos_9  = @battleship.player_retrieve_grid_position(player_guess_9)
+  #   shot_pos_10 = @battleship.player_retrieve_grid_position(player_guess_10)
+  #   shot_pos_11 = @battleship.player_retrieve_grid_position(player_guess_11)
+  #   shot_pos_12 = @battleship.player_retrieve_grid_position(player_guess_12)
+  #   shot_pos_13 = @battleship.player_retrieve_grid_position(player_guess_13)
+  #   shot_pos_14 = @battleship.player_retrieve_grid_position(player_guess_14)
+  #   shot_pos_15 = @battleship.player_retrieve_grid_position(player_guess_15)
+  #   shot_pos_16 = @battleship.player_retrieve_grid_position(player_guess_16)
+  #
+  #   shot_hit_1  = @battleship.computer_battleship_hit?(shot_pos_1)
+  #   shot_hit_2  = @battleship.computer_battleship_hit?(shot_pos_2)
+  #   shot_hit_3  = @battleship.computer_battleship_hit?(shot_pos_3)
+  #   shot_hit_4  = @battleship.computer_battleship_hit?(shot_pos_4)
+  #   shot_hit_5  = @battleship.computer_battleship_hit?(shot_pos_5)
+  #   shot_hit_6  = @battleship.computer_battleship_hit?(shot_pos_6)
+  #   shot_hit_7  = @battleship.computer_battleship_hit?(shot_pos_7)
+  #   shot_hit_8  = @battleship.computer_battleship_hit?(shot_pos_8)
+  #   shot_hit_9  = @battleship.computer_battleship_hit?(shot_pos_9)
+  #   shot_hit_10 = @battleship.computer_battleship_hit?(shot_pos_10)
+  #   shot_hit_11 = @battleship.computer_battleship_hit?(shot_pos_11)
+  #   shot_hit_12 = @battleship.computer_battleship_hit?(shot_pos_12)
+  #   shot_hit_13 = @battleship.computer_battleship_hit?(shot_pos_13)
+  #   shot_hit_14 = @battleship.computer_battleship_hit?(shot_pos_14)
+  #   shot_hit_15 = @battleship.computer_battleship_hit?(shot_pos_15)
+  #   shot_hit_16 = @battleship.computer_battleship_hit?(shot_pos_16)
+  #
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_1, shot_pos_1)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_2, shot_pos_2)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_3, shot_pos_3)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_4, shot_pos_4)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_5, shot_pos_5)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_6, shot_pos_6)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_7, shot_pos_7)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_8, shot_pos_8)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_9, shot_pos_9)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_10, shot_pos_10)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_11, shot_pos_11)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_12, shot_pos_12)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_13, shot_pos_13)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_14, shot_pos_14)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_15, shot_pos_15)
+  #   @battleship.computer_game_display_hits_and_misses(shot_hit_16, shot_pos_16)
+  #
+  #   assert_equal 5, @battleship.computer_game_display.rows.join.count('o')
+  #   assert_equal 11, @battleship.computer_game_display.rows.join.count('m')
+  # end
 end

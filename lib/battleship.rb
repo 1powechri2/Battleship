@@ -51,6 +51,9 @@ class Battleship
     no_overlap = @player_board.ship_size_2_will_not_overlap_ship_size_3(@play_ship_size_2)
     @play_ship_size_3 = @player_board.pick_ship_placement_size_3_for_human(no_overlap, player_ship_size_3)
 
+    @player_board.place_ship(@play_ship_size_2)
+    @player_board.place_ship(@play_ship_size_3)
+
     @game.humanoid_game_display_records_ships(@play_ship_size_2)
     @game.humanoid_game_display_records_ships(@play_ship_size_3)
 
@@ -63,7 +66,7 @@ class Battleship
       puts "#{@game.humanoid_game_display.print_to_screen}"
       puts 'COMPUTER'
       puts "#{@game.computer_game_display.print_to_screen}"
-
+      # player turn
       print 'Player Fire!!! >'
       guess = gets.chomp
       shot_position = @game.player_retrieve_grid_position(guess)
@@ -72,8 +75,6 @@ class Battleship
       @game.computer_game_display_hits_and_misses(hit, shot_position)
 
       if hit == true
-        puts "You've hit my battleship!!!"
-        puts "You've hit my battleship!!!"
         puts "You've hit my battleship!!!"
       else
         puts "You've Missed"
@@ -84,21 +85,42 @@ class Battleship
 
       if sunk_1 == true
         puts "You've sunk my battleship!!!"
-        puts "You've sunk my battleship!!!"
-        puts "You've sunk my battleship!!!"
       end
 
       if sunk_2 == true
         puts "You've sunk my battleship!!!"
-        puts "You've sunk my battleship!!!"
-        puts "You've sunk my battleship!!!"
+      end
+
+      puts 'please end you turn now by pressing the return key'
+      
+      # computer turn
+      cpu_shot_position = @game.computer_retrieve_grid_position
+      strike = @game.player_battleship_hit?(cpu_shot_position)
+      @game.mark_hit_player_ship(strike, cpu_shot_position)
+      @game.humanoid_game_display_hits_and_misses(strike, cpu_shot_position)
+
+      if strike == true
+        puts "Your ship has been hit!!!"
+      else
+        puts "Your ships have been missed."
+      end
+
+      player_sunk_1 = @game.computer_battleship_sunk?(@play_ship_size_2)
+      player_sunk_2 = @game.computer_battleship_sunk?(@play_ship_size_3)
+
+      if player_sunk_1 == true
+        puts "Your small battleship has been sunk!!!"
+      end
+
+      if player_sunk_2 == true
+        puts "Your large battleship has been sunk!!!"
       end
 
       if @game.count_computer_hits == 5
-        puts "You're Awesome"
+        puts "You're Awesome!!!"
         break
       elsif @game.count_player_hits == 5
-        puts "You Suck"
+        puts "You Suck!!!"
         break
       end
     end
