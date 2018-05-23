@@ -27,7 +27,7 @@ class Battleship
       setup_computer
     elsif welcome.downcase == 'i'
       instructions
-    elsif welcom.downcase == 'q'
+    elsif welcome.downcase == 'q'
       puts 'Goodbye'
     end
   end
@@ -43,7 +43,7 @@ class Battleship
   end
 
   def setup_player
-    pick_ship_size_2_message
+    enter_ships_prompt
     player_ship_size_2 = gets.chomp
     @play_ship_size_2 = @player_board.pick_ship_placement_size_2_for_human(player_ship_size_2)
     pick_ship_size_3_message
@@ -67,21 +67,30 @@ class Battleship
       print 'Player Fire!!! >'
       guess = gets.chomp
       shot_position = @game.player_retrieve_grid_position(guess)
-      hit = @game.computer_battleship_hit?(shot)
-      sunk_1 = @game.player_battleship_sunk?(@comp_ship_size_2)
-      sunk_2 = @game.player_battleship_sunk?(@comp_ship_size_3)
+      hit = @game.computer_battleship_hit?(shot_position)
+      @game.mark_hit_computer_ship(hit, shot_position)
+      @game.computer_game_display_hits_and_misses(hit, shot_position)
+
       if hit == true
         puts "You've hit my battleship!!!"
-        @game.mark_hit_computer_ship(hit, shot_position)
+        puts "You've hit my battleship!!!"
+        puts "You've hit my battleship!!!"
       else
         puts "You've Missed"
       end
 
+      sunk_1 = @game.computer_battleship_sunk?(@comp_ship_size_2)
+      sunk_2 = @game.computer_battleship_sunk?(@comp_ship_size_3)
+
       if sunk_1 == true
+        puts "You've sunk my battleship!!!"
+        puts "You've sunk my battleship!!!"
         puts "You've sunk my battleship!!!"
       end
 
       if sunk_2 == true
+        puts "You've sunk my battleship!!!"
+        puts "You've sunk my battleship!!!"
         puts "You've sunk my battleship!!!"
       end
 
@@ -94,7 +103,6 @@ class Battleship
       end
     end
   end
-
 end
 
 play_battleship = Battleship.new
