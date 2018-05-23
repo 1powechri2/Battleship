@@ -70,7 +70,7 @@ class GameBoard
       ship's coordinates or your ship is overlaping\n
       your other ship. Try Again."
       pick_again = gets.chomp
-      pick_ship_placement_size_2_for_human(pick_again)
+      pick_ship_placement_size_3_for_human(pick_again)
     end
   end
 

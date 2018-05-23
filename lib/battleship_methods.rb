@@ -69,7 +69,7 @@ class BattleshipMethods
   end
 
   def humanoid_game_display_records_ships(ship)
-    ship.split(' ').each do |coordinate|
+    ship.each do |coordinate|
       position = @humanoid_game_display.display_positions[coordinate.to_sym]
       @humanoid_game_display.rows[position[0]][position[1]] = 'x'
     end

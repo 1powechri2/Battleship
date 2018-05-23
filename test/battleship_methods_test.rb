@@ -497,11 +497,12 @@ class BattleshipMethodsTest < Minitest::Test
     ship_size_2 = @battleship.player_board.pick_ship_placement_size_2_for_human(pick_1)
     no_overlap  = @battleship.player_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
     ship_size_3 = @battleship.player_board.pick_ship_placement_size_3_for_human(no_overlap, pick_2)
+
     @battleship.player_board.place_ship(ship_size_2)
     @battleship.player_board.place_ship(ship_size_3)
 
-    @battleship.humanoid_game_display_records_ships(pick_1)
-    @battleship.humanoid_game_display_records_ships(pick_2)
+    @battleship.humanoid_game_display_records_ships(ship_size_2)
+    @battleship.humanoid_game_display_records_ships(ship_size_3)
 
     expected = ['1      x',\
                 '2    x x',\
@@ -522,8 +523,8 @@ class BattleshipMethodsTest < Minitest::Test
     @battleship.player_board.place_ship(ship_size_2)
     @battleship.player_board.place_ship(ship_size_3)
 
-    @battleship.humanoid_game_display_records_ships(pick_1)
-    @battleship.humanoid_game_display_records_ships(pick_2)
+    @battleship.humanoid_game_display_records_ships(ship_size_2)
+    @battleship.humanoid_game_display_records_ships(ship_size_3)
 
     computer_shot_1 = [1, 2]
     computer_shot_2 = [1, 0]
