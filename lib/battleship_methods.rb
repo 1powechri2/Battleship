@@ -67,7 +67,7 @@ class BattleshipMethods
   end
 
   def player_battleship_sunk?(ship)
-    ship.split(' ').map do |coordinate|
+    ship.map do |coordinate|
       position = @grid_positions[coordinate.to_sym]
       @player_board.rows[position[0]][position[1]] == 'o'
     end.all?

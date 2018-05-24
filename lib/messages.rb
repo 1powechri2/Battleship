@@ -16,7 +16,9 @@ Enter the squares for the two-unit ship >'
 end
 
 def pick_ship_placement_size_2_error_messages
-  puts "You have entered an incorrect guess
+  puts "You have entered an incorrect guess.
+You must enter the row letter followed by the
+column number. Row
 either your ship is placed off the board or
 you forgot to put a space in between your
 ship's coordinates. Try Again."
@@ -38,6 +40,16 @@ end
 
 def pick_ship_size_3_message
   puts 'Now select coordinates for a ship with three coordinates >'
+end
+
+def instructions
+  puts "Battleship is a classic naval war game where you try to determine
+the location of your enemie's ships on a hidden grid. Everytime you
+guess a correct position, that guess counts as a hit. Place your ships on
+a 4x4 grid of coordinates. The coordinates are labeled a1, a2, a3, a4,
+b1, b2 etc... through d4. You must pick your coordinates in ascending order.
+Defeat your enemy by guessing one coordinate at a time. Would you like to
+(p)lay or (q)uit?"
 end
 
 end

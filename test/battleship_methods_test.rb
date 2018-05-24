@@ -196,7 +196,7 @@ class BattleshipMethodsTest < Minitest::Test
 
     @battleship.mark_hit_player_ship(hit, shot_1)
 
-    refute @battleship.player_battleship_sunk?(pick_1)
+    refute @battleship.player_battleship_sunk?(ship_size_2)
 
     shot_guess_2 = 'b4'
     shot_2 = @battleship.player_retrieve_grid_position(shot_guess_2)
@@ -204,7 +204,7 @@ class BattleshipMethodsTest < Minitest::Test
 
     @battleship.mark_hit_player_ship(hit, shot_2)
 
-    assert @battleship.player_battleship_sunk?(pick_1)
+    assert @battleship.player_battleship_sunk?(ship_size_2)
   end
 
   def test_player_battleship_size_3_sunk?
@@ -228,7 +228,7 @@ class BattleshipMethodsTest < Minitest::Test
 
     @battleship.mark_hit_player_ship(hit, shot_2)
 
-    refute @battleship.player_battleship_sunk?(pick_2)
+    refute @battleship.player_battleship_sunk?(ship_size_3)
 
     shot_guess_3 = 'd3'
     shot_3 = @battleship.player_retrieve_grid_position(shot_guess_3)
@@ -236,7 +236,7 @@ class BattleshipMethodsTest < Minitest::Test
 
     @battleship.mark_hit_player_ship(hit, shot_3)
 
-    assert @battleship.player_battleship_sunk?(pick_2)
+    assert @battleship.player_battleship_sunk?(ship_size_3)
   end
 
   def test_computer_battleship_size_2_sunk?
@@ -569,82 +569,82 @@ class BattleshipMethodsTest < Minitest::Test
     assert_equal expected, actual
   end
 
-  # def test_computer_game_display_hits_and_misses
-  #   ship_size_2 = @battleship.computer_board.pick_ship_placement_size_2_for_computer
-  #   no_overlap  = @battleship.computer_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
-  #   ship_size_3 = @battleship.computer_board.pick_ship_placement_size_3_for_computer(no_overlap)
-  #   @battleship.computer_board.place_ship(ship_size_2)
-  #   @battleship.computer_board.place_ship(ship_size_3)
-  #
-  #   player_guess_1  = 'a1'
-  #   player_guess_2  = 'a2'
-  #   player_guess_3  = 'a3'
-  #   player_guess_4  = 'a4'
-  #   player_guess_5  = 'b1'
-  #   player_guess_6  = 'b2'
-  #   player_guess_7  = 'b3'
-  #   player_guess_8  = 'b4'
-  #   player_guess_9  = 'c1'
-  #   player_guess_10 = 'c2'
-  #   player_guess_11 = 'c3'
-  #   player_guess_12 = 'c4'
-  #   player_guess_13 = 'd1'
-  #   player_guess_14 = 'd2'
-  #   player_guess_15 = 'd3'
-  #   player_guess_16 = 'd4'
-  #
-  #   shot_pos_1  = @battleship.player_retrieve_grid_position(player_guess_1)
-  #   shot_pos_2  = @battleship.player_retrieve_grid_position(player_guess_2)
-  #   shot_pos_3  = @battleship.player_retrieve_grid_position(player_guess_3)
-  #   shot_pos_4  = @battleship.player_retrieve_grid_position(player_guess_4)
-  #   shot_pos_5  = @battleship.player_retrieve_grid_position(player_guess_5)
-  #   shot_pos_6  = @battleship.player_retrieve_grid_position(player_guess_6)
-  #   shot_pos_7  = @battleship.player_retrieve_grid_position(player_guess_7)
-  #   shot_pos_8  = @battleship.player_retrieve_grid_position(player_guess_8)
-  #   shot_pos_9  = @battleship.player_retrieve_grid_position(player_guess_9)
-  #   shot_pos_10 = @battleship.player_retrieve_grid_position(player_guess_10)
-  #   shot_pos_11 = @battleship.player_retrieve_grid_position(player_guess_11)
-  #   shot_pos_12 = @battleship.player_retrieve_grid_position(player_guess_12)
-  #   shot_pos_13 = @battleship.player_retrieve_grid_position(player_guess_13)
-  #   shot_pos_14 = @battleship.player_retrieve_grid_position(player_guess_14)
-  #   shot_pos_15 = @battleship.player_retrieve_grid_position(player_guess_15)
-  #   shot_pos_16 = @battleship.player_retrieve_grid_position(player_guess_16)
-  #
-  #   shot_hit_1  = @battleship.computer_battleship_hit?(shot_pos_1)
-  #   shot_hit_2  = @battleship.computer_battleship_hit?(shot_pos_2)
-  #   shot_hit_3  = @battleship.computer_battleship_hit?(shot_pos_3)
-  #   shot_hit_4  = @battleship.computer_battleship_hit?(shot_pos_4)
-  #   shot_hit_5  = @battleship.computer_battleship_hit?(shot_pos_5)
-  #   shot_hit_6  = @battleship.computer_battleship_hit?(shot_pos_6)
-  #   shot_hit_7  = @battleship.computer_battleship_hit?(shot_pos_7)
-  #   shot_hit_8  = @battleship.computer_battleship_hit?(shot_pos_8)
-  #   shot_hit_9  = @battleship.computer_battleship_hit?(shot_pos_9)
-  #   shot_hit_10 = @battleship.computer_battleship_hit?(shot_pos_10)
-  #   shot_hit_11 = @battleship.computer_battleship_hit?(shot_pos_11)
-  #   shot_hit_12 = @battleship.computer_battleship_hit?(shot_pos_12)
-  #   shot_hit_13 = @battleship.computer_battleship_hit?(shot_pos_13)
-  #   shot_hit_14 = @battleship.computer_battleship_hit?(shot_pos_14)
-  #   shot_hit_15 = @battleship.computer_battleship_hit?(shot_pos_15)
-  #   shot_hit_16 = @battleship.computer_battleship_hit?(shot_pos_16)
-  #
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_1, shot_pos_1)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_2, shot_pos_2)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_3, shot_pos_3)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_4, shot_pos_4)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_5, shot_pos_5)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_6, shot_pos_6)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_7, shot_pos_7)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_8, shot_pos_8)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_9, shot_pos_9)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_10, shot_pos_10)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_11, shot_pos_11)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_12, shot_pos_12)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_13, shot_pos_13)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_14, shot_pos_14)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_15, shot_pos_15)
-  #   @battleship.computer_game_display_hits_and_misses(shot_hit_16, shot_pos_16)
-  #
-  #   assert_equal 5, @battleship.computer_game_display.rows.join.count('o')
-  #   assert_equal 11, @battleship.computer_game_display.rows.join.count('m')
-  # end
+  def test_computer_game_display_hits_and_misses
+    ship_size_2 = @battleship.computer_board.pick_ship_placement_size_2_for_computer
+    no_overlap  = @battleship.computer_board.ship_size_2_will_not_overlap_ship_size_3(ship_size_2)
+    ship_size_3 = @battleship.computer_board.pick_ship_placement_size_3_for_computer(no_overlap)
+    @battleship.computer_board.place_ship(ship_size_2)
+    @battleship.computer_board.place_ship(ship_size_3)
+
+    player_guess_1  = 'a1'
+    player_guess_2  = 'a2'
+    player_guess_3  = 'a3'
+    player_guess_4  = 'a4'
+    player_guess_5  = 'b1'
+    player_guess_6  = 'b2'
+    player_guess_7  = 'b3'
+    player_guess_8  = 'b4'
+    player_guess_9  = 'c1'
+    player_guess_10 = 'c2'
+    player_guess_11 = 'c3'
+    player_guess_12 = 'c4'
+    player_guess_13 = 'd1'
+    player_guess_14 = 'd2'
+    player_guess_15 = 'd3'
+    player_guess_16 = 'd4'
+
+    shot_pos_1  = @battleship.player_retrieve_grid_position(player_guess_1)
+    shot_pos_2  = @battleship.player_retrieve_grid_position(player_guess_2)
+    shot_pos_3  = @battleship.player_retrieve_grid_position(player_guess_3)
+    shot_pos_4  = @battleship.player_retrieve_grid_position(player_guess_4)
+    shot_pos_5  = @battleship.player_retrieve_grid_position(player_guess_5)
+    shot_pos_6  = @battleship.player_retrieve_grid_position(player_guess_6)
+    shot_pos_7  = @battleship.player_retrieve_grid_position(player_guess_7)
+    shot_pos_8  = @battleship.player_retrieve_grid_position(player_guess_8)
+    shot_pos_9  = @battleship.player_retrieve_grid_position(player_guess_9)
+    shot_pos_10 = @battleship.player_retrieve_grid_position(player_guess_10)
+    shot_pos_11 = @battleship.player_retrieve_grid_position(player_guess_11)
+    shot_pos_12 = @battleship.player_retrieve_grid_position(player_guess_12)
+    shot_pos_13 = @battleship.player_retrieve_grid_position(player_guess_13)
+    shot_pos_14 = @battleship.player_retrieve_grid_position(player_guess_14)
+    shot_pos_15 = @battleship.player_retrieve_grid_position(player_guess_15)
+    shot_pos_16 = @battleship.player_retrieve_grid_position(player_guess_16)
+
+    shot_hit_1  = @battleship.computer_battleship_hit?(shot_pos_1)
+    shot_hit_2  = @battleship.computer_battleship_hit?(shot_pos_2)
+    shot_hit_3  = @battleship.computer_battleship_hit?(shot_pos_3)
+    shot_hit_4  = @battleship.computer_battleship_hit?(shot_pos_4)
+    shot_hit_5  = @battleship.computer_battleship_hit?(shot_pos_5)
+    shot_hit_6  = @battleship.computer_battleship_hit?(shot_pos_6)
+    shot_hit_7  = @battleship.computer_battleship_hit?(shot_pos_7)
+    shot_hit_8  = @battleship.computer_battleship_hit?(shot_pos_8)
+    shot_hit_9  = @battleship.computer_battleship_hit?(shot_pos_9)
+    shot_hit_10 = @battleship.computer_battleship_hit?(shot_pos_10)
+    shot_hit_11 = @battleship.computer_battleship_hit?(shot_pos_11)
+    shot_hit_12 = @battleship.computer_battleship_hit?(shot_pos_12)
+    shot_hit_13 = @battleship.computer_battleship_hit?(shot_pos_13)
+    shot_hit_14 = @battleship.computer_battleship_hit?(shot_pos_14)
+    shot_hit_15 = @battleship.computer_battleship_hit?(shot_pos_15)
+    shot_hit_16 = @battleship.computer_battleship_hit?(shot_pos_16)
+
+    @battleship.computer_game_display_hits_and_misses(shot_hit_1, shot_pos_1)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_2, shot_pos_2)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_3, shot_pos_3)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_4, shot_pos_4)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_5, shot_pos_5)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_6, shot_pos_6)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_7, shot_pos_7)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_8, shot_pos_8)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_9, shot_pos_9)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_10, shot_pos_10)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_11, shot_pos_11)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_12, shot_pos_12)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_13, shot_pos_13)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_14, shot_pos_14)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_15, shot_pos_15)
+    @battleship.computer_game_display_hits_and_misses(shot_hit_16, shot_pos_16)
+
+    assert_equal 5, @battleship.computer_game_display.rows.join.count('o')
+    assert_equal 11, @battleship.computer_game_display.rows.join.count('m')
+  end
 end

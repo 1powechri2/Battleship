@@ -28,6 +28,12 @@ class Battleship
       setup_computer
     elsif welcome.downcase == 'i'
       instructions
+      instruct = gets.chomp
+      if instruct == 'p'
+        setup_computer
+      elsif instruct == 'q'
+        puts 'Goodbye'
+      end
     elsif welcome.downcase == 'q'
       puts 'Goodbye'
     end
@@ -86,11 +92,11 @@ class Battleship
       sunk_2 = @game.computer_battleship_sunk?(@comp_ship_size_3)
 
       if sunk_1 == true
-        puts "You've sunk my battleship!!!"
+        puts "You've sunk my small battleship!!!"
       end
 
       if sunk_2 == true
-        puts "You've sunk my battleship!!!"
+        puts "You've sunk my large battleship!!!"
       end
 
       # computer turn
@@ -105,8 +111,8 @@ class Battleship
         puts "Your ships have been missed."
       end
 
-      player_sunk_1 = @game.computer_battleship_sunk?(@play_ship_size_2)
-      player_sunk_2 = @game.computer_battleship_sunk?(@play_ship_size_3)
+      player_sunk_1 = @game.player_battleship_sunk?(@play_ship_size_2)
+      player_sunk_2 = @game.player_battleship_sunk?(@play_ship_size_3)
 
       if player_sunk_1 == true
         puts "Your small battleship has been sunk!!!"
