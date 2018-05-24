@@ -99,6 +99,9 @@ class Battleship
         puts "You've sunk my large battleship!!!"
       end
 
+      puts 'Are you ready for the computer to fire? Please hit the return key.'
+      comp_fire = gets.chomp
+
       # computer turn
       cpu_shot_position = @game.computer_retrieve_grid_position
       strike = @game.player_battleship_hit?(cpu_shot_position)
