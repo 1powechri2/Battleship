@@ -1,4 +1,7 @@
+require './lib/messages'
+
 class BattleshipMethods
+  include Messages
   attr_reader :player_board,
               :computer_board,
               :computer_game_display,
@@ -31,7 +34,7 @@ class BattleshipMethods
       @player_guesses.delete(guess.downcase)
       return @grid_positions[guess.downcase.to_sym]
     else
-      puts 'you have to pick something on the board, try again'
+      player_shot_error_message
       pick_again = gets.chomp
       player_retrieve_grid_position(pick_again)
     end

@@ -18,6 +18,7 @@ class Battleship
     @comp_ship_size_3 = nil
     @play_ship_size_2 = nil
     @play_ship_size_3 = nil
+    @counter = 0
   end
 
   def welcome
@@ -62,6 +63,7 @@ class Battleship
 
   def game_loop
     loop do
+      @counter += 1
       puts ' PLAYER'
       puts "#{@game.humanoid_game_display.print_to_screen}"
       puts 'COMPUTER'
@@ -91,8 +93,6 @@ class Battleship
         puts "You've sunk my battleship!!!"
       end
 
-      puts 'please end you turn now by pressing the return key'
-      
       # computer turn
       cpu_shot_position = @game.computer_retrieve_grid_position
       strike = @game.player_battleship_hit?(cpu_shot_position)
@@ -118,9 +118,11 @@ class Battleship
 
       if @game.count_computer_hits == 5
         puts "You're Awesome!!!"
+        puts "It took #{@counter} shots to win."
         break
       elsif @game.count_player_hits == 5
         puts "You Suck!!!"
+        puts "It took #{@counter} shots to lose."
         break
       end
     end
